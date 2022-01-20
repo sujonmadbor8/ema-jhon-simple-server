@@ -48,8 +48,9 @@ client.connect((err) => {
 
   app.post("/productBykeys", (req, res) => {
     const productKeys = req.body;
+    const search = rea.query.search;
     productsCollection
-      .find({ key: { $in: productKeys } })
+      .find({ key: { $in: productKeys } }, { name: { $regex: search } })
       .toArray((err, documents) => {
         res.send(documents);
       });
