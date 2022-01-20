@@ -33,9 +33,12 @@ client.connect((err) => {
   });
   // get data
   app.get("/products", (req, res) => {
-    productsCollection.find({}).toArray((err, documents) => {
-      res.send(documents);
-    });
+    const search = rea.query.search;
+    productsCollection
+      .find({ name: { $regex: search } })
+      .toArray((err, documents) => {
+        res.send(documents);
+      });
   });
   //get single data
   app.get("/product/:key", (req, res) => {
@@ -48,9 +51,9 @@ client.connect((err) => {
 
   app.post("/productBykeys", (req, res) => {
     const productKeys = req.body;
-    const search = rea.query.search;
+
     productsCollection
-      .find({ key: { $in: productKeys } }, { name: { $regex: search } })
+      .find({ key: { $in: productKeys } })
       .toArray((err, documents) => {
         res.send(documents);
       });
